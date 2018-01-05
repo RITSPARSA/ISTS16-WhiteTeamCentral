@@ -1,2 +1,2 @@
-# ISTS16-WhiteTeamCentral
-Centralized WhiteTeam backend API for gathering relevant information.
+# ISTS16-CommandCenterBackend
+A White Team managed backend API for the command center web application.
