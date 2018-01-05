@@ -1,2 +1,86 @@
-# ISTS16-CommandCenterBackend
-A White Team managed backend API for the command center web application.
+# ISTS16-WhiteTeamCentral
+
+Centralized WhiteTeam backend API for gathering relevant information.
+
+## Status Functions
+
+### Alerts
+
+```
+/status/alerts
+```
+Returns any currently active White Team alerts.
+
+Return Format:
+```
+{
+  'status': 200,
+  'alerts': ['Perk5 will be unavailable for 10 minutes']
+}
+```
+
+### King of the Hill
+
+```
+/status/koth
+```
+Returns status information for King of the Hill.
+
+Return Format:
+```
+{
+  'status': 200,
+  'planets': {'planet1': 'team4', 'planet2': 'team1'}
+}
+```
+
+## Team Functions
+
+### Credits
+
+```
+/credits/<teamID>
+```
+Retrieves the number of credits the given team currently owns.
+
+Return Format:
+```
+{
+  'status': 200,
+  'credits': 50000
+}
+```
+
+### Ships
+
+```
+/ships/<teamID>
+```
+Retrieves the number of ships of each type that the given team currently owns.
+
+Return Format:
+```
+{
+  'status': 200,
+  'ship1_count': 50,
+  'ship2_count': 0,
+  'ship3_count': 1000
+}
+```
+
+### Perks
+
+```
+/perks/<teamID>
+```
+Retrieves the perks that the given team currently has active.
+
+Return Format:
+```
+{
+  'status': 200,
+  'active_perks': ['perk1', 'perk2', 'bonus health']
+}
+```
+
+
