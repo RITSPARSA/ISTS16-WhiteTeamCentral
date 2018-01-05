@@ -5,6 +5,10 @@ from flask import request, jsonify
 """
     Statuses
 """
+@app.route("/status/alerts")
+def alerts():
+    return jsonify({'status': 200, 'alerts': ['Perk5 will be unavailable for 10 minutes']})
+
 @app.route('/status/koth')
 def koth():
     return jsonify({'status': 200, 'planets': {'planet1': 'team4'}})
