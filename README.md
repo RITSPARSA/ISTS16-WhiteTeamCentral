@@ -68,18 +68,20 @@ Return Format:
 }
 ```
 
-### Perks
+### Stats
 
 ```
-/perks/<teamID>
+/stats/<teamID>
 ```
-Retrieves the perks that the given team currently has active.
+Retrieves the ship stats that the given team currently has.
 
 Return Format:
 ```
 {
   'status': 200,
-  'active_perks': ['perk1', 'perk2', 'bonus health']
+  'health': '-50%',
+  'damage': '100%',
+  'speed': '+100%'
 }
 ```
 
