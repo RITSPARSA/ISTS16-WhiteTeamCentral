@@ -22,11 +22,11 @@ def getCredits(teamID):
         return jsonify({'status': 404})
     return jsonify({'status': 200, 'credits': 50000})
 
-@app.route('/perks/<teamID>')
+@app.route('/stats/<teamID>')
 def getPerks(teamID):
     if not validateteamID(teamID):
         return jsonify({'status': 404})
-    return jsonify({'status': 200, 'active_perks': ['perk1', 'perk2', 'bonus health']})
+    return jsonify({'status': 200, 'health': '-50%', 'damage': '100%', 'speed': '+100%'})
 
 @app.route('/ships/<teamID>')
 def getShips(teamID):
