@@ -2,11 +2,11 @@
 Entry points for API calls
 """
 from flask import request, jsonify
-from . import app, DB
+from . import app
 from . import errors
 from .models.planets import Planet
 from .models.alerts import Alert
-from .util import validate_session
+from .util import validate_session, api_request
 
 """
     Statuses
@@ -56,11 +56,23 @@ def get_credits(team_id):
 
     :returns result: a dict containing the credits for the team
     """
+    result = dict()
     if 'token' not in request.cookies:
         raise errors.AuthError("No session token")
     token = request.cookies['token']
-    validate_session(token)
-    return jsonify({'status': 200, 'credits': 50000})
+
+    # make request to credits api
+    post_data = dict()
+    post_data['token'] = token
+    resp = api_request("get-balance", post_data)
+    session_team_id = resp['team_id']
+    # if the passed session is not for the team that was requested, raise error
+    if session_team_id != team_id:
+        raise errors.RequestError("Can only make requests for your team")
+
+    balance = resp['balance']
+    result['credits'] = balance
+    return jsonify(result)
 
 @app.route('/stats/<team_id>')
 def get_perks(team_id):
@@ -69,10 +81,16 @@ def get_perks(team_id):
 
     :returns result: a dict containg each perk and its status
     """
+    result = dict()
     if 'token' not in request.cookies:
         raise errors.AuthError("No session token")
     token = request.cookies['token']
-    return jsonify({'status': 200, 'health': '-50%', 'damage': '100%', 'speed': '+100%'})
+
+    resp = api_request("teams/{}".format(team_id), method='GET', token=token)
+    result['health'] = resp['health']
+    result['damage'] = resp['damage']
+    result['speed'] = resp['speed']
+    return jsonify(result)
 
 @app.route('/ships/<team_id>')
 def get_ships(team_id):
@@ -81,10 +99,16 @@ def get_ships(team_id):
 
     :returns result: a dict containing each ship and its count
     """
+    result = dict()
     if 'token' not in request.cookies:
         raise errors.AuthError("No session token")
     token = request.cookies['token']
-    return jsonify({'status': 200, 'ship1_count': 50, 'ship2_count': 0, 'ship3_count': 1000})
+
+    resp = api_request("teams/{}".format(team_id), method='GET', token=token)
+    result['guardian'] = resp['guardian']
+    result['striker'] = resp['striker']
+    result['bomber'] = resp['bomber']
+    return jsonify(result)
 
 
 """

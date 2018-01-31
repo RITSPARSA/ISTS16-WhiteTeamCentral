@@ -3,9 +3,12 @@ Configuration settings.
 """
 AUTH_API_URL = "http://lilbite.org:9000"
 BANK_API_URL = "http://lilbite.org:5000"
+SHIP_API_URL = "http://192.168.1.38:5000"
 
 AUTH_ENDPOINTS = ['validate-session', 'login', 'update-password',
                   'expire-session', 'update-session', 'pub-key']
+
+BANK_ENDPOINTS = ['get-balance', 'buy', 'transfer', 'transactions', 'items']
 
 SQLALCHEMY_DATABASE_URI = 'mysql://root:youwontguess23$@localhost/ists'
 

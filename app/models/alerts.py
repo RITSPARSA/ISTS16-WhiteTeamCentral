@@ -10,7 +10,7 @@ class Alert(DB.Model):
     :param uuid: the id of the alert
     """
     __tablename__ = 'alert'
-    uuid = DB.Column(DB.Integer, primary_key=True, auto_increment=True)
+    uuid = DB.Column(DB.Integer, primary_key=True, autoincrement=True)
 
 
     def __init__(self, uuid):
