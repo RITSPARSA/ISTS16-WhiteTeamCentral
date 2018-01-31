@@ -44,6 +44,11 @@ class RequestError(APIErrors):
     def __init__(self, message=None, status_code=400):
         APIErrors.__init__(self, message, status_code)
 
+class APIConnectionError(APIErrors):
+    """Error connecting to the API"""
+    def __init__(self, message=None, status_code=500):
+        APIErrors.__init__(self, message, status_code)
+
 
 @app.errorhandler(APIErrors)
 def handle_api_error(error):
