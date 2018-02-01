@@ -56,7 +56,6 @@ def get_credits(team_id):
 
     :returns result: a dict containing the credits for the team
     """
-    token = request.cookies['token']
     result = dict()
     data = request.get_json()
     if data is None:
