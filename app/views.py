@@ -22,9 +22,7 @@ def alerts():
     result['alerts'] = []
     alerts = Alert.query.all()
     for alert in alerts:
-        alert_dict = dict()
-        alert_dict['alert_id'] = alert.uuid
-        result['alerts'].append(alert_dict)
+        result['alerts'].append(alert.message)
 
     return jsonify(result)
 
@@ -173,3 +171,6 @@ def update_koth():
 
     DB.session.commit()
     return 'Success', 200
+
+
+## ADD ENDPOINT TO CREATE/CLEAR ALERTS
