@@ -244,9 +244,10 @@ def clear_alert():
 
     name = data['name']
 
-    alert_to_remove = Alert.query.filter_by(name=name).first()
+    alerts_to_remove = Alert.query.filter_by(name=name).all()
+    for alert in alerts_to_remove:
+        DB.session.delete(alert)
 
-    DB.session.delete(alert_to_remove)
     DB.session.commit()
 
     result['success'] = "Successfully cleared alert"
