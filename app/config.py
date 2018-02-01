@@ -17,4 +17,7 @@ CHANNEL = "#white-team-tool"
 SLACK_USERNAME = "White Team"
 ICON_EMOJI = ":robot_face:"
 
-NUM_PLANETS = 13
+PLANET_NAMES = ['Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 
+                'Ganymede', 'Callisto', 'Europa', 'Titan', 'Rhea', 'Tethys']
+
+SECRET_KEY = "itshouldhavebeenslackpole"

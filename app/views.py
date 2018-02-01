@@ -7,7 +7,7 @@ from . import errors
 from .models.planets import Planet
 from .models.alerts import Alert
 from .util import validate_session, api_request
-
+from .config import SECRET_KEY
 """
     Statuses
 """
@@ -37,10 +37,10 @@ def koth():
     """
     result = dict()
     result['planets'] = []
-    planets = Planet.query.all()
+    planets = Planet.query.filter_by(status='started').all()
     for planet in planets:
         planet_dict = dict()
-        planet_dict['planet_id'] = planet.uuid
+        planet_dict['planet'] = planet.name
         planet_dict['owner'] = planet.owner
         result['planets'].append(planet_dict)
 
@@ -122,4 +122,23 @@ def update_koth():
 
     param update: dictionary containing each planet and its owner
     """
-    pass
+    data = request.get_json()
+
+    secret_key = data['key']
+    if secret_key != SECRET_KEY:
+        return "Bad key", 200
+
+    planet_name = data['planet']
+    planet = Planet.query.filter_by(name=planet_name).first()
+    action = data['action']
+    if action == 'end':
+        planet.status = 'end'
+
+    elif action == 'start':
+        planet.status = 'started'
+
+    elif action == 'update':
+        owner = data['team']
+        planet.owner = owner
+
+    return 'Success', 200
