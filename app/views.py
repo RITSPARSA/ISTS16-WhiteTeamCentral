@@ -77,7 +77,7 @@ def get_credits(team_id):
     resp = api_request("get-balance", post_data)
     session_team_id = resp['team_id']
     # if the passed session is not for the team that was requested, raise error
-    if session_team_id != team_id:
+    if int(session_team_id) != int(team_id):
         raise errors.RequestError("Can only make requests for your team")
 
     balance = resp['balance']
