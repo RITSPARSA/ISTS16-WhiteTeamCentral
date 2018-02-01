@@ -57,9 +57,9 @@ def get_credits(team_id):
     :returns result: a dict containing the credits for the team
     """
     result = dict()
-    data = request.get_json()
+    data = request.form
     if data is None:
-        data = request.form
+        data = request.get_json()
         if data is None:
             abort(400)
 
@@ -90,9 +90,17 @@ def get_perks(team_id):
     :returns result: a dict containg each perk and its status
     """
     result = dict()
-    if 'token' not in request.cookies:
-        raise errors.AuthError("No session token")
-    token = request.cookies['token']
+    data = request.form
+    if data is None:
+        data = request.get_json()
+        if data is None:
+            abort(400)
+
+    # make sure we have all the correct parameters
+    params = ['token']
+    validate_request(params, data)
+
+    token = data['token']
 
     resp = api_request("teams/{}".format(team_id), method='GET', token=token)
     result['health'] = resp['health']
@@ -108,9 +116,17 @@ def get_ships(team_id):
     :returns result: a dict containing each ship and its count
     """
     result = dict()
-    if 'token' not in request.cookies:
-        raise errors.AuthError("No session token")
-    token = request.cookies['token']
+    data = request.form
+    if data is None:
+        data = request.get_json()
+        if data is None:
+            abort(400)
+
+    # make sure we have all the correct parameters
+    params = ['token']
+    validate_request(params, data)
+
+    token = data['token']
 
     resp = api_request("teams/{}".format(team_id), method='GET', token=token)
     result['guardian'] = resp['guardian']
