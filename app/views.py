@@ -1,12 +1,12 @@
 """
 Entry points for API calls
 """
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from . import app, DB
 from . import errors
 from .models.planets import Planet
 from .models.alerts import Alert
-from .util import validate_session, api_request
+from .util import validate_session, api_request, validate_request
 from .config import SECRET_KEY
 """
     Statuses
@@ -49,17 +49,26 @@ def koth():
 """
     Team Functions
 """
-@app.route('/credits/<team_id>')
+@app.route('/credits/<team_id>', methods=['POST'])
 def get_credits(team_id):
     """
     Get the credits of a specific team
 
     :returns result: a dict containing the credits for the team
     """
-    result = dict()
-    if 'token' not in request.cookies:
-        raise errors.AuthError("No session token")
     token = request.cookies['token']
+    result = dict()
+    data = request.get_json()
+    if data is None:
+        data = request.form
+        if data is None:
+            abort(400)
+
+    # make sure we have all the correct parameters
+    params = ['token']
+    validate_request(params, data)
+
+    token = data['token']
 
     # make request to credits api
     post_data = dict()
@@ -74,7 +83,7 @@ def get_credits(team_id):
     result['credits'] = balance
     return jsonify(result)
 
-@app.route('/stats/<team_id>')
+@app.route('/stats/<team_id>', methods=['POST'])
 def get_perks(team_id):
     """
     Get the current perks for a team
@@ -92,7 +101,7 @@ def get_perks(team_id):
     result['speed'] = resp['speed']
     return jsonify(result)
 
-@app.route('/ships/<team_id>')
+@app.route('/ships/<team_id>', methods=['POST'])
 def get_ships(team_id):
     """
     Get the current number of ships the team has
