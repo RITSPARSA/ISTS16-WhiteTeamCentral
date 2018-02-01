@@ -68,6 +68,8 @@ def get_credits(team_id):
     validate_request(params, data)
 
     token = data['token']
+    # the way we send it is janky, need to trim some stuff
+    token = token.replace("token=", "")
 
     # make request to credits api
     post_data = dict()
@@ -101,6 +103,8 @@ def get_perks(team_id):
     validate_request(params, data)
 
     token = data['token']
+    # the way we send it is janky, need to trim some stuff
+    token = token.replace("token=", "")
 
     resp = api_request("teams/{}".format(team_id), method='GET', token=token)
     result['health'] = resp['health']
@@ -127,6 +131,8 @@ def get_ships(team_id):
     validate_request(params, data)
 
     token = data['token']
+    # the way we send it is janky, need to trim some stuff
+    token = token.replace("token=", "")
 
     resp = api_request("teams/{}".format(team_id), method='GET', token=token)
     result['guardian'] = resp['guardian']
