@@ -2,7 +2,7 @@
 Entry points for API calls
 """
 from flask import request, jsonify
-from . import app
+from . import app, DB
 from . import errors
 from .models.planets import Planet
 from .models.alerts import Alert
@@ -125,7 +125,7 @@ def update_koth():
     data = request.get_json()
 
     secret_key = data['key']
-    if secret_key != SECRET_KEY:
+    if str(secret_key) != str(SECRET_KEY):
         return "Bad key", 200
 
     planet_name = data['planet']
@@ -141,4 +141,5 @@ def update_koth():
         owner = data['team']
         planet.owner = owner
 
+    DB.session.commit()
     return 'Success', 200
