@@ -159,7 +159,7 @@ def update_koth():
     if str(secret_key) != str(SECRET_KEY):
         return "Bad key", 200
 
-    planet_name = data['planet']
+    planet_name = str(data['planet']).lower()
     planet = Planet.query.filter_by(name=planet_name).first()
     action = data['action']
     if action == 'end':
