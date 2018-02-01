@@ -8,6 +8,8 @@ from .models.planets import Planet
 from .models.alerts import Alert
 from .util import validate_session, api_request, validate_request
 from .config import SECRET_KEY
+
+
 """
     Statuses
 """
@@ -20,8 +22,8 @@ def alerts():
     """
     result = dict()
     result['alerts'] = []
-    alerts = Alert.query.all()
-    for alert in alerts:
+    alert_list = Alert.query.all()
+    for alert in alert_list:
         result['alerts'].append(alert.message)
 
     return jsonify(result)
@@ -152,6 +154,7 @@ def update_koth():
     """
     data = request.get_json()
 
+    # validate its our koth server sending us the updates
     secret_key = data['key']
     if str(secret_key) != str(SECRET_KEY):
         return "Bad key", 200
@@ -173,4 +176,78 @@ def update_koth():
     return 'Success', 200
 
 
-## ADD ENDPOINT TO CREATE/CLEAR ALERTS
+@app.route('/create/alert', methods=['POST'])
+def create_alert():
+    """
+    Creates a new alert in our database
+
+    :param token: the auth token
+    :param name: name of alert to create
+    :param message: the message of the alert
+
+    :returns result: json dict containg success or error
+    """
+    result = dict()
+    data = request.form
+    if data is None:
+        data = request.get_json()
+        if data is None:
+            abort(400)
+
+    # make sure we have all the correct parameters
+    params = ['token', 'name', 'message']
+    validate_request(params, data)
+
+    # validate its white team
+    token = data['token']
+    team_id = validate_session(token)
+    if int(team_id) != 1337:
+        raise errors.AuthError("Not whiteteam")
+
+    name = data['name']
+    message = data['message']
+
+    new_alert = Alert(name=name, message=message)
+    DB.session.add(new_alert)
+    DB.session.commit()
+
+    result['success'] = "Successfully created alert"
+    return jsonify(result)
+
+
+@app.route('/clear/alert', methods=['POST'])
+def clear_alert():
+    """
+    Clear an alert in our database
+
+    :param token: the auth token
+    :param name: name of alert to clear
+
+    :returns result: json dict containg success or error
+    """
+    result = dict()
+    data = request.form
+    if data is None:
+        data = request.get_json()
+        if data is None:
+            abort(400)
+
+    # make sure we have all the correct parameters
+    params = ['token', 'name']
+    validate_request(params, data)
+
+    # validate its white team
+    token = data['token']
+    team_id = validate_session(token)
+    if int(team_id) != 1337:
+        raise errors.AuthError("Not whiteteam")
+
+    name = data['name']
+
+    alert_to_remove = Alert.query.filter_by(name=name).first()
+
+    DB.session.delete(alert_to_remove)
+    DB.session.commit()
+
+    result['success'] = "Successfully cleared alert"
+    return jsonify(result)
