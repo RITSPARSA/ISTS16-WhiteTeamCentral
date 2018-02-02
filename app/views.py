@@ -40,7 +40,7 @@ def koth():
     planets = Planet.query.filter_by(status='started').all()
     for planet in planets:
         planet_dict = dict()
-        planet_dict['planet'] = planet.name
+        planet_dict['planet'] = str(planet.name).title()
         planet_dict['owner'] = planet.owner
         result['planets'].append(planet_dict)
 
