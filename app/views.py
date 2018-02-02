@@ -2,7 +2,7 @@
 Entry points for API calls
 """
 from flask import request, jsonify, abort
-from . import app, DB
+from . import app, DB, logger
 from . import errors
 from .models.planets import Planet
 from .models.alerts import Alert
