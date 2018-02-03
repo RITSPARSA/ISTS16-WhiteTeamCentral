@@ -173,6 +173,7 @@ def update_koth():
         planet.owner = owner
 
     DB.session.commit()
+    logger.info("Updated KOTH planet %s is now %s", planet_name, planet.status)
     return 'Success', 200
 
 
