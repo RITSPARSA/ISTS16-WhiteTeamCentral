@@ -189,9 +189,9 @@ def create_alert():
     :returns result: json dict containg success or error
     """
     result = dict()
-    data = request.form
+    data = request.get_json()
     if data is None:
-        data = request.get_json()
+        data = request.form
         if data is None:
             abort(400)
 
